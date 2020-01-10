@@ -20,7 +20,7 @@ WITH CTE AS
 (
     SELECT TOP(1) *
     FROM Kiukie.Queue 
-    ORDER BY Id DESC
+    ORDER BY Id 
 )
 DELETE FROM CTE
 OUTPUT deleted.Payload";
