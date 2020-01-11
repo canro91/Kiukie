@@ -10,11 +10,11 @@ namespace Kiukie
     public class QueueProcessorHostedService : BackgroundService
     {
         private readonly IQueueProcessor QueueProcessor;
-        private readonly ProcessorConfiguration Config;
+        private readonly QueueProcessorConfig Config;
         private readonly ILogger<QueueProcessorHostedService> Logger;
 
         public QueueProcessorHostedService(IQueueProcessor queueProcessor,
-                                           IOptions<ProcessorConfiguration> configuration,
+                                           IOptions<QueueProcessorConfig> configuration,
                                            ILogger<QueueProcessorHostedService> logger)
         {
             QueueProcessor = queueProcessor;

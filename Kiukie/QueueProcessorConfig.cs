@@ -1,6 +1,6 @@
 ﻿namespace Kiukie
 {
-    public class ProcessorConfiguration
+    public class QueueProcessorConfig
     {
         public int PollIntervalMilliseconds { get; set; }
     }
