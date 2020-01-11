@@ -35,7 +35,7 @@ namespace Kiukie.Tests
         public void ProcessAsync_ExceptionWhileProcessingItem_ThrowException()
         {
             var queue = new SingleItemQueue(new StringItem("An item"));
-            var handler = new TrhowExceptionPayloadHandler(new Exception("An exception"));
+            var handler = new ThrowExceptionPayloadHandler(new Exception("An exception"));
             var queueProcessor = new QueueProcessor<StringItem>(queue, handler);
 
             Assert.ThrowsAsync<Exception>(() => queueProcessor.ProcessAsync());
@@ -86,11 +86,11 @@ namespace Kiukie.Tests
         }
     }
 
-    public class TrhowExceptionPayloadHandler : IPayloadHandler<StringItem>
+    public class ThrowExceptionPayloadHandler : IPayloadHandler<StringItem>
     {
         public Exception Exception;
 
-        public TrhowExceptionPayloadHandler(Exception exception)
+        public ThrowExceptionPayloadHandler(Exception exception)
         {
             Exception = exception;
         }
