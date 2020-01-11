@@ -32,7 +32,7 @@ namespace Kiukie.Sample
                     services.AddTransient<IQueueProcessor, QueueProcessor<StringItem>>();
 
                     services.AddHostedService<QueueItemProducer>();
-                    services.AddHostedService<QueueProcessorHostedService>();
+                    services.AddHostedService<QueueService>();
                 })
                 .ConfigureLogging((hostingContext, logging) =>
                 {

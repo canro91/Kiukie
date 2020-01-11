@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace Kiukie
 {
-    public class QueueProcessorHostedService : BackgroundService
+    public class QueueService : BackgroundService
     {
         private readonly IQueueProcessor QueueProcessor;
         private readonly QueueProcessorConfig Config;
-        private readonly ILogger<QueueProcessorHostedService> Logger;
+        private readonly ILogger<QueueService> Logger;
 
-        public QueueProcessorHostedService(IQueueProcessor queueProcessor,
+        public QueueService(IQueueProcessor queueProcessor,
                                            IOptions<QueueProcessorConfig> configuration,
-                                           ILogger<QueueProcessorHostedService> logger)
+                                           ILogger<QueueService> logger)
         {
             QueueProcessor = queueProcessor;
             Config = configuration.Value;
