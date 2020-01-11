@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 
 namespace Kiukie.Sample
@@ -14,7 +15,7 @@ namespace Kiukie.Sample
 
         public async Task ProcessAsync(StringItem queueItem)
         {
-            Logger.LogInformation($"Processing item: {queueItem.Payload}");
+            Logger.LogInformation($"Processing item: {queueItem.Payload} at {DateTime.Now:yyyy-MM-dd hh:mm:ss}");
             await Task.Delay(1*1000);
         }
     }
