@@ -44,8 +44,6 @@ namespace Kiukie.Tests
 
     public class StringItem : IQueueItem<string>
     {
-        public StringItem() { }
-
         public StringItem(string payload)
         {
             Payload = payload;

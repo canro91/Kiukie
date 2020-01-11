@@ -1,8 +1,8 @@
 ﻿using Insight.Database;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
-using System.Data.SqlClient;
+using System.Data;
 using System.Threading.Tasks;
-using System.Transactions;
 
 namespace Kiukie.Tests.Integration
 {
@@ -12,10 +12,10 @@ namespace Kiukie.Tests.Integration
         [Test]
         public async Task ProcessAsync_SingleItemInQueue_ProcessesAndEmptiesQueue()
         {
-            using (var scope = new TransactionScope(TransactionScopeAsyncFlowOption.Enabled))
+            using (var scope = new IsolationScope(TestContext.Provider))
             {
-                var connection = new SqlConnection(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=Kiukie;Integrated Security=True;");
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem("An item"));
+                var connection = scope.Provider.GetRequiredService<IDbConnection>();
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("An item"));
 
                 var queue = new DefaultQueue<string>(connection);
                 var handler = new FakePayloadHandler();
