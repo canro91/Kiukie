@@ -12,7 +12,7 @@ namespace Kiukie.Tests.Integration
         [Test]
         public async Task ProcessAsync_SingleItemInQueue_ProcessesAndEmptiesQueue()
         {
-            using (var scope = new IsolationScope(TestContext.Provider))
+            using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
                 await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("An item"));

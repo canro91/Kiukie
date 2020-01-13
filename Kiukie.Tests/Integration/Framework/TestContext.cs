@@ -10,7 +10,7 @@ using System.Data.SqlClient;
 namespace Kiukie.Tests.Integration
 {
     [SetUpFixture]
-    public class TestContext
+    public class TestFixtureContext
     {
         [OneTimeSetUp]
         public void ApplyMigrations()
@@ -23,7 +23,7 @@ namespace Kiukie.Tests.Integration
             using (var connection = new SqlConnection(connString))
             {
                 var databaseProvider = new MssqlDatabaseProvider(connection);
-                var migrator = new SimpleMigrator(typeof(TestContext).Assembly, databaseProvider);
+                var migrator = new SimpleMigrator(typeof(TestFixtureContext).Assembly, databaseProvider);
                 migrator.Load();
                 migrator.MigrateToLatest();
             }

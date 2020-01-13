@@ -1,6 +1,7 @@
 ﻿using Insight.Database;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
+using System;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
@@ -13,7 +14,7 @@ namespace Kiukie.Tests.Integration
         [Test]
         public async Task Dequeue_TwoConcurrentCalls_DequeueDifferentItems()
         {
-            using (var scope = new IsolationScope(TestContext.Provider))
+            using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
                 await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("An item"));
@@ -33,7 +34,7 @@ namespace Kiukie.Tests.Integration
         [Test]
         public async Task Dequeue_TwoItemsInQueue_DequeueItemsInOrder()
         {
-            using (var scope = new IsolationScope(TestContext.Provider))
+            using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
                 await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("Item1"));
@@ -49,4 +50,18 @@ namespace Kiukie.Tests.Integration
             }
         }
     }
+
+    public class StringItem : IQueueItem<string>
+    {
+        public StringItem(string payload)
+        {
+            Payload = payload;
+        }
+
+        public int StatusId { get; set; }
+        public string Payload { get; set; }
+        public DateTime CreatedDate { get; set; }
+        public DateTime UpdatedDate { get; set; }
+    }
+
 }

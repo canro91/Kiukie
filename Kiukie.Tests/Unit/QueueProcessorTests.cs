@@ -2,7 +2,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Kiukie.Tests
+namespace Kiukie.Tests.Unit
 {
     [TestFixture]
     public class QueueProcessorTests
