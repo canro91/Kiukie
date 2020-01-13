@@ -29,5 +29,24 @@ namespace Kiukie.Tests.Integration
                 Assert.IsTrue(items.First().Payload != items.Last().Payload);
             }
         }
+
+        [Test]
+        public async Task Dequeue_TwoItemsInQueue_DequeueItemsInOrder()
+        {
+            using (var scope = new IsolationScope(TestContext.Provider))
+            {
+                var connection = scope.Provider.GetRequiredService<IDbConnection>();
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("Item1"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("Item2"));
+
+                var queue = new DefaultQueue<StringItem>(connection);
+
+                var item1 = await queue.DequeueAsync();
+                Assert.AreEqual("Item1", item1.Payload);
+
+                var item2 = await queue.DequeueAsync();
+                Assert.AreEqual("Item2", item2.Payload);
+            }
+        }
     }
 }
