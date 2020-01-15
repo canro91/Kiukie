@@ -14,8 +14,8 @@ namespace Kiukie
         private readonly ILogger<QueueService> Logger;
 
         public QueueService(IQueueProcessor queueProcessor,
-                                           IOptions<QueueProcessorConfig> configuration,
-                                           ILogger<QueueService> logger)
+                            IOptions<QueueProcessorConfig> configuration,
+                            ILogger<QueueService> logger)
         {
             QueueProcessor = queueProcessor;
             Config = configuration.Value;

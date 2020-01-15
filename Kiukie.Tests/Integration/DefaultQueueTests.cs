@@ -12,6 +12,20 @@ namespace Kiukie.Tests.Integration
     public class DefaultQueueTests
     {
         [Test]
+        public async Task Dequeue_EmptyQueue_ReturnsNull()
+        {
+            using (var scope = new IsolationScope(TestFixtureContext.Provider))
+            {
+                var connection = scope.Provider.GetRequiredService<IDbConnection>();
+                var queue = new DefaultQueue<StringItem>(connection);
+
+                var item = await queue.DequeueAsync();
+
+                Assert.IsNull(item);
+            }
+        }
+
+        [Test]
         public async Task Dequeue_TwoConcurrentCalls_DequeueDifferentItems()
         {
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
@@ -63,5 +77,4 @@ namespace Kiukie.Tests.Integration
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
     }
-
 }

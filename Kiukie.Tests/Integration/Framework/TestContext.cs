@@ -45,7 +45,7 @@ namespace Kiukie.Tests.Integration
         private static void LoadServices(string connString)
         {
             var services = new ServiceCollection();
-            services.AddTransient<IDbConnection>((provider) => new SqlConnection(connString));
+            services.AddScoped<IDbConnection>((provider) => new SqlConnection(connString));
 
             Provider = services.BuildServiceProvider();
         }
