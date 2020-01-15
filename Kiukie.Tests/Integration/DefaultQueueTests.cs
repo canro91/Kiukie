@@ -38,7 +38,7 @@ namespace Kiukie.Tests.Integration
                 var queue2 = new DefaultQueue<StringItem>(connection);
 
                 var t1 = queue1.DequeueAsync();
-                var t2 = queue1.DequeueAsync();
+                var t2 = queue2.DequeueAsync();
 
                 var items = await Task.WhenAll(t1, t2);
                 Assert.IsTrue(items.First().Payload != items.Last().Payload);

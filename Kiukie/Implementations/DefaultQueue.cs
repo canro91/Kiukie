@@ -24,7 +24,7 @@ WITH CTE AS
 )
 DELETE FROM CTE
 OUTPUT deleted.Payload";
-            return await Connection.SingleSqlAsync<T>(sql: sql, Connection);
+            return await Connection.SingleSqlAsync<T>(sql: sql);
         }
     }
 }

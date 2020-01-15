@@ -41,11 +41,16 @@ namespace Kiukie.Tests.Integration
 
             return builder.Build();
         }
-        
+
         private static void LoadServices(string connString)
         {
             var services = new ServiceCollection();
-            services.AddScoped<IDbConnection>((provider) => new SqlConnection(connString));
+            services.AddScoped<IDbConnection>((provider) =>
+            {
+                var connection = new SqlConnection(connString);
+                connection.Open();
+                return connection;
+            });
 
             Provider = services.BuildServiceProvider();
         }

@@ -27,7 +27,7 @@ WITH CTE AS
 UPDATE CTE
 SET StatusId = 2, UpdatedDate = GETDATE()
 OUTPUT INSERTED.*";
-            return await Connection.SingleSqlAsync<T>(sql: sql, Connection);
+            return await Connection.SingleSqlAsync<T>(sql: sql);
         }
 
         public Task UpdateAsync(T item, Exception e = null)
