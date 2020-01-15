@@ -67,11 +67,22 @@ namespace Kiukie.Tests.Integration
 
     public class StringItem : IQueueItem<string>
     {
+        public StringItem()
+        {
+        }
+
         public StringItem(string payload)
         {
             Payload = payload;
         }
 
+        public StringItem(ItemStatus status, string payload)
+        {
+            StatusId = (int)status;
+            Payload = payload;
+        }
+
+        public int Id { get; set; }
         public int StatusId { get; set; }
         public string Payload { get; set; }
         public DateTime CreatedDate { get; set; }
