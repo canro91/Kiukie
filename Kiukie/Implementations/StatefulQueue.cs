@@ -14,7 +14,7 @@ namespace Kiukie
             Connection = connection;
         }
 
-        public async Task<T> DequeueAsync()
+        public async Task<IQueueItem<T>> DequeueAsync()
         {
             var sql = @"
 WITH CTE AS
@@ -27,12 +27,16 @@ WITH CTE AS
 UPDATE CTE
 SET StatusId = 2, UpdatedDate = GETDATE()
 OUTPUT INSERTED.*";
-            return await Connection.SingleSqlAsync<T>(sql: sql);
+            return await Connection.SingleSqlAsync<QueueItem<T>>(sql: sql);
         }
 
-        public Task UpdateAsync(T item, Exception e = null)
+        public async Task UpdateAsync(IQueueItem<T> item, Exception e = null)
         {
-            return Task.CompletedTask;
+            var status = (e == null) ? ItemStatus.Succeeded : ItemStatus.Failed;
+            await Connection.ExecuteSqlAsync(@"
+UPDATE Kiukie.Queue
+SET StatusId = @StatusId
+WHERE Id = @Id", new { StatusId = (int)status, Id = item.Id });
         }
     }
 

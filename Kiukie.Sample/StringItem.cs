@@ -11,6 +11,7 @@ namespace Kiukie.Sample
             Payload = payload;
         }
 
+        public int Id { get; set; }
         public int StatusId { get; set; }
         public string Payload { get; set; }
         public DateTime CreatedDate { get; set; }

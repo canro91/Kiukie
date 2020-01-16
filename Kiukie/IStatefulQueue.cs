@@ -5,8 +5,8 @@ namespace Kiukie
 {
     public interface IStatefulQueue<T>
     {
-        Task<T> DequeueAsync();
+        Task<IQueueItem<T>> DequeueAsync();
 
-        Task UpdateAsync(T item, Exception e = null);
+        Task UpdateAsync(IQueueItem<T> item, Exception e = null);
     }
 }
