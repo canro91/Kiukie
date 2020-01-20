@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Kiukie.Sample
 {
-    public class StringItemPayloadHandler : IPayloadHandler<StringItem>
+    public class StringItemPayloadHandler : IPayloadHandler<string>
     {
         private readonly ILogger<StringItemPayloadHandler> Logger;
 
@@ -13,9 +13,9 @@ namespace Kiukie.Sample
             Logger = logger;
         }
 
-        public async Task ProcessAsync(StringItem queueItem)
+        public async Task ProcessAsync(string payload)
         {
-            Logger.LogInformation($"Processing item: {queueItem.Payload} at {DateTime.Now:yyyy-MM-dd hh:mm:ss}");
+            Logger.LogInformation($"Processing item: {payload} at {DateTime.Now:yyyy-MM-dd hh:mm:ss}");
             await Task.Delay(1*1000);
         }
     }

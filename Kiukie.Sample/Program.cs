@@ -27,9 +27,9 @@ namespace Kiukie.Sample
                     services.AddTransient<IDbConnection>((provider) => new SqlConnection(connString));
 
                     services.Configure<QueueProcessorConfig>(config.GetSection("QueueProcessor"));
-                    services.AddTransient<IPayloadHandler<StringItem>, StringItemPayloadHandler>();
-                    services.AddTransient<IQueue<StringItem>, DefaultQueue<StringItem>>();
-                    services.AddTransient<IQueueProcessor, QueueProcessor<StringItem>>();
+                    services.AddTransient<IPayloadHandler<string>, StringItemPayloadHandler>();
+                    services.AddTransient<IQueue<string>, DefaultQueue<string>>();
+                    services.AddTransient<IQueueProcessor, QueueProcessor<string>>();
 
                     services.AddHostedService<QueueItemProducer>();
                     services.AddHostedService<QueueService>();

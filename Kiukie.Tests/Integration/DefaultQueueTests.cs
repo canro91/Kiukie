@@ -17,7 +17,7 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                var queue = new DefaultQueue<StringItem>(connection);
+                var queue = new DefaultQueue<string>(connection);
 
                 var item = await queue.DequeueAsync();
 
@@ -34,8 +34,8 @@ namespace Kiukie.Tests.Integration
                 await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("An item"));
                 await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("Another item"));
 
-                var queue1 = new DefaultQueue<StringItem>(connection);
-                var queue2 = new DefaultQueue<StringItem>(connection);
+                var queue1 = new DefaultQueue<string>(connection);
+                var queue2 = new DefaultQueue<string>(connection);
 
                 var t1 = queue1.DequeueAsync();
                 var t2 = queue2.DequeueAsync();
@@ -54,7 +54,7 @@ namespace Kiukie.Tests.Integration
                 await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("Item1"));
                 await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem("Item2"));
 
-                var queue = new DefaultQueue<StringItem>(connection);
+                var queue = new DefaultQueue<string>(connection);
 
                 var item1 = await queue.DequeueAsync();
                 Assert.AreEqual("Item1", item1.Payload);

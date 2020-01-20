@@ -12,7 +12,7 @@ namespace Kiukie.Tests.Unit
         {
             var queue = new EmptyQueue();
             var handler = new FakePayloadHandler();
-            var queueProcessor = new QueueProcessor<StringItem>(queue, handler);
+            var queueProcessor = new QueueProcessor<string>(queue, handler);
 
             var processed = await queueProcessor.ProcessAsync();
 
@@ -24,7 +24,7 @@ namespace Kiukie.Tests.Unit
         {
             var queue = new SingleItemQueue(new StringItem("An item"));
             var handler = new FakePayloadHandler();
-            var queueProcessor = new QueueProcessor<StringItem>(queue, handler);
+            var queueProcessor = new QueueProcessor<string>(queue, handler);
 
             var processed = await queueProcessor.ProcessAsync();
 
@@ -36,7 +36,7 @@ namespace Kiukie.Tests.Unit
         {
             var queue = new SingleItemQueue(new StringItem("An item"));
             var handler = new ThrowExceptionPayloadHandler(new Exception("An exception"));
-            var queueProcessor = new QueueProcessor<StringItem>(queue, handler);
+            var queueProcessor = new QueueProcessor<string>(queue, handler);
 
             Assert.ThrowsAsync<Exception>(() => queueProcessor.ProcessAsync());
         }
@@ -56,7 +56,7 @@ namespace Kiukie.Tests.Unit
         public DateTime UpdatedDate { get; set; }
     }
 
-    public class SingleItemQueue : IQueue<StringItem>
+    public class SingleItemQueue : IQueue<string>
     {
         public StringItem Item;
 
@@ -65,29 +65,29 @@ namespace Kiukie.Tests.Unit
             Item = item;
         }
 
-        public Task<StringItem> DequeueAsync()
+        public Task<IQueueItem<string>> DequeueAsync()
         {
-            return Task.FromResult(Item);
+            return Task.FromResult((IQueueItem<string>)Item);
         }
     }
 
-    public class EmptyQueue : IQueue<StringItem>
+    public class EmptyQueue : IQueue<string>
     {
-        public Task<StringItem> DequeueAsync()
+        public Task<IQueueItem<string>> DequeueAsync()
         {
-            return Task.FromResult<StringItem>(null);
+            return Task.FromResult((IQueueItem<string>)null);
         }
     }
 
-    public class FakePayloadHandler : IPayloadHandler<StringItem>
+    public class FakePayloadHandler : IPayloadHandler<string>
     {
-        public Task ProcessAsync(StringItem queueItem)
+        public Task ProcessAsync(string queueItem)
         {
             return Task.CompletedTask;
         }
     }
 
-    public class ThrowExceptionPayloadHandler : IPayloadHandler<StringItem>
+    public class ThrowExceptionPayloadHandler : IPayloadHandler<string>
     {
         public Exception Exception;
 
@@ -96,7 +96,7 @@ namespace Kiukie.Tests.Unit
             Exception = exception;
         }
 
-        public Task ProcessAsync(StringItem queueItem)
+        public Task ProcessAsync(string queueItem)
         {
             return Task.FromException(Exception);
         }

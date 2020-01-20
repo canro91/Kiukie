@@ -21,6 +21,8 @@ namespace Kiukie.Sample
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            Connection.ExecuteSql("TRUNCATE TABLE Kiukie.Queue");
+
             foreach (var bulk in Enumerable.Range(0, 2))
             {
                 Logger.LogInformation($"Creating Bulk {bulk}");

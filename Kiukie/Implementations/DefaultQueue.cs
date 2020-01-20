@@ -13,7 +13,7 @@ namespace Kiukie
             Connection = connection;
         }
 
-        public async Task<T> DequeueAsync()
+        public async Task<IQueueItem<T>> DequeueAsync()
         {
             var sql = @"
 WITH CTE AS
@@ -24,7 +24,7 @@ WITH CTE AS
 )
 DELETE FROM CTE
 OUTPUT deleted.Payload";
-            return await Connection.SingleSqlAsync<T>(sql: sql);
+            return await Connection.SingleSqlAsync<QueueItem<T>>(sql: sql);
         }
     }
 }

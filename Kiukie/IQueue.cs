@@ -4,6 +4,6 @@ namespace Kiukie
 {
     public interface IQueue<T>
     {
-        Task<T> DequeueAsync();
+        Task<IQueueItem<T>> DequeueAsync();
     }
 }

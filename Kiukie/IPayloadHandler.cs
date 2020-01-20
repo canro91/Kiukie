@@ -4,6 +4,6 @@ namespace Kiukie
 {
     public interface IPayloadHandler<T>
     {
-        Task ProcessAsync(T queueItem);
+        Task ProcessAsync(T payload);
     }
 }

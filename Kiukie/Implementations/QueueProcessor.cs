@@ -21,7 +21,7 @@ namespace Kiukie
                 return false;
             }
 
-            await PayloadHandler.ProcessAsync(queueItem);
+            await PayloadHandler.ProcessAsync(queueItem.Payload);
             return true;
         }
     }
