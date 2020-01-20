@@ -29,7 +29,7 @@ namespace Kiukie.Sample
 
                 foreach (var item in Enumerable.Range(0, 100))
                 {
-                    Connection.ExecuteSql("INSERT INTO Kiukie.Queue(Payload) VALUES(@Payload)", new StringItem($"Item-{bulk}-{item}"));
+                    Connection.ExecuteSql("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, $"Item-{bulk}-{item}"));
                 }
                 await Task.Delay(1 * 1000);
             }

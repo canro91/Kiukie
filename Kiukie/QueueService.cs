@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -9,15 +10,15 @@ namespace Kiukie
 {
     public class QueueService : BackgroundService
     {
-        private readonly IQueueProcessor QueueProcessor;
+        private readonly IServiceProvider Services;
         private readonly QueueProcessorConfig Config;
         private readonly ILogger<QueueService> Logger;
 
-        public QueueService(IQueueProcessor queueProcessor,
+        public QueueService(IServiceProvider services,
                             IOptions<QueueProcessorConfig> configuration,
                             ILogger<QueueService> logger)
         {
-            QueueProcessor = queueProcessor;
+            Services = services;
             Config = configuration.Value;
             Logger = logger;
         }
@@ -28,11 +29,14 @@ namespace Kiukie
             {
                 try
                 {
-                    // TODO Use scope here...
-                    var itemProcessed = await QueueProcessor.ProcessAsync();
-                    if (!itemProcessed)
+                    using (var scope = Services.CreateScope())
                     {
-                        await Task.Delay(Config.PollIntervalMilliseconds, stoppingToken);
+                        var queueProcessor = scope.ServiceProvider.GetRequiredService<IQueueProcessor>();
+                        var itemProcessed = await queueProcessor.ProcessAsync();
+                        if (!itemProcessed)
+                        {
+                            await Task.Delay(Config.PollIntervalMilliseconds, stoppingToken);
+                        }
                     }
                 }
                 catch (Exception e)

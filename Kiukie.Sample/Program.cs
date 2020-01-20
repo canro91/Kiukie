@@ -24,12 +24,19 @@ namespace Kiukie.Sample
 
                     var config = hostingContext.Configuration;
                     var connString = config.GetConnectionString("Kiukie");
-                    services.AddTransient<IDbConnection>((provider) => new SqlConnection(connString));
+                    services.AddScoped<IDbConnection>((provider) => new SqlConnection(connString));
 
+                    // 1. Use an stateless queue and queue processor
+                    //services.Configure<QueueProcessorConfig>(config.GetSection("QueueProcessor"));
+                    //services.AddScoped<IPayloadHandler<string>, StringItemPayloadHandler>();
+                    //services.AddScoped<IQueue<string>, DefaultQueue<string>>();
+                    //services.AddScoped<IQueueProcessor, QueueProcessor<string>>();
+
+                    // 2. Use an statefull queue and queue processor
                     services.Configure<QueueProcessorConfig>(config.GetSection("QueueProcessor"));
-                    services.AddTransient<IPayloadHandler<string>, StringItemPayloadHandler>();
-                    services.AddTransient<IQueue<string>, DefaultQueue<string>>();
-                    services.AddTransient<IQueueProcessor, QueueProcessor<string>>();
+                    services.AddScoped<IPayloadHandler<string>, StringItemPayloadHandler>();
+                    services.AddScoped<IStatefulQueue<string>, StatefulQueue<string>>();
+                    services.AddScoped<IQueueProcessor, StatefulQueueProcessor<string>>();
 
                     services.AddHostedService<QueueItemProducer>();
                     services.AddHostedService<QueueService>();
