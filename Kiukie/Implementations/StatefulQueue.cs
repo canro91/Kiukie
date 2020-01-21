@@ -39,12 +39,4 @@ SET StatusId = @StatusId
 WHERE Id = @Id", new { StatusId = (int)status, Id = item.Id });
         }
     }
-
-    public enum ItemStatus
-    {
-        Pending = 1,
-        Processing,
-        Succeeded,
-        Failed
-    }
 }
