@@ -36,7 +36,7 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "An item"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "An item"));
 
                 var queue = CreateQueue(connection);
                 var item = await queue.DequeueAsync();
@@ -46,15 +46,15 @@ namespace Kiukie.Tests.Integration
         }
 
         [Test]
-        [TestCase(ItemStatus.Succeeded)]
-        [TestCase(ItemStatus.Failed)]
-        public async Task Dequeue_PendingAndAlreadyProcessedItem_ReturnsPendingItem(ItemStatus status)
+        [TestCase(QueueItemStatus.Succeeded)]
+        [TestCase(QueueItemStatus.Failed)]
+        public async Task Dequeue_PendingAndAlreadyProcessedItem_ReturnsPendingItem(QueueItemStatus status)
         {
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
                 await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) OUTPUT Inserted.Id VALUES(@StatusId, @Payload)", new StringItem(status, "Processed"));
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) OUTPUT Inserted.Id VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "Pending"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) OUTPUT Inserted.Id VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "Pending"));
 
                 var queue = CreateQueue(connection);
                 var item = await queue.DequeueAsync();
@@ -70,13 +70,13 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "An item"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "An item"));
 
                 var queue = CreateQueue(connection);
                 var item = await queue.DequeueAsync();
 
                 Assert.IsNotNull(item);
-                Assert.AreEqual((int)ItemStatus.Processing, item.StatusId);
+                Assert.AreEqual((int)QueueItemStatus.Processing, item.StatusId);
             }
         }
 
@@ -86,8 +86,8 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "Item1"));
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "Item2"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "Item1"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "Item2"));
 
                 var queue = CreateQueue(connection);
 
@@ -107,8 +107,8 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "Item1"));
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "Item2"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "Item1"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "Item2"));
 
                 var queue1 = CreateQueue(connection);
                 var queue2 = CreateQueue(connection);
@@ -127,13 +127,13 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                var pending = await connection.InsertSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) OUTPUT Inserted.Id VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Processing, "An Item"));
+                var pending = await connection.InsertSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) OUTPUT Inserted.Id VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Processing, "An Item"));
 
                 var queue = CreateQueue(connection);
                 await queue.UpdateAsync(pending);
 
                 var updatedEvent = await connection.SingleSqlAsync<StringItem>("SELECT * FROM Kiukie.Queue WHERE Id = @Id", new { pending.Id });
-                Assert.AreEqual((int)ItemStatus.Succeeded, updatedEvent.StatusId);
+                Assert.AreEqual((int)QueueItemStatus.Succeeded, updatedEvent.StatusId);
             }
         }
 
@@ -143,13 +143,13 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                var pending = await connection.InsertSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) OUTPUT Inserted.Id VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Processing, "An Item"));
+                var pending = await connection.InsertSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) OUTPUT Inserted.Id VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Processing, "An Item"));
 
                 var queue = CreateQueue(connection);
                 await queue.UpdateAsync(pending, new Exception("Any Exception"));
 
                 var updatedEvent = await connection.SingleSqlAsync<StringItem>("SELECT * FROM Kiukie.Queue WHERE Id = @Id", new { pending.Id });
-                Assert.AreEqual((int)ItemStatus.Failed, updatedEvent.StatusId);
+                Assert.AreEqual((int)QueueItemStatus.Failed, updatedEvent.StatusId);
             }
         }
     }

@@ -16,7 +16,7 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "An item"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "An item"));
 
                 var queue = new StatefulQueue<string>(connection);
                 var handler = new FakePayloadHandler();
@@ -36,7 +36,7 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "An item"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "An item"));
 
                 var queue = new StatefulQueue<string>(connection);
                 var handler = new FakePayloadHandler();
@@ -47,7 +47,7 @@ namespace Kiukie.Tests.Integration
 
                 var item = await connection.SingleSqlAsync<StringItem>("SELECT TOP 1 * FROM Kiukie.Queue");
                 Assert.IsNotNull(item);
-                Assert.AreEqual((int)ItemStatus.Succeeded, item.StatusId);
+                Assert.AreEqual((int)QueueItemStatus.Succeeded, item.StatusId);
             }
         }
 
@@ -57,7 +57,7 @@ namespace Kiukie.Tests.Integration
             using (var scope = new IsolationScope(TestFixtureContext.Provider))
             {
                 var connection = scope.Provider.GetRequiredService<IDbConnection>();
-                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(ItemStatus.Pending, "An item"));
+                await connection.ExecuteSqlAsync("INSERT INTO Kiukie.Queue(StatusId, Payload) VALUES(@StatusId, @Payload)", new StringItem(QueueItemStatus.Pending, "An item"));
 
                 var queue = new StatefulQueue<string>(connection);
                 var handler = new ThrowExceptionPayloadHandler(new Exception("Any exception"));
@@ -67,7 +67,7 @@ namespace Kiukie.Tests.Integration
 
                 var item = await connection.SingleSqlAsync<StringItem>("SELECT TOP 1 * FROM Kiukie.Queue");
                 Assert.IsNotNull(item);
-                Assert.AreEqual((int)ItemStatus.Failed, item.StatusId);
+                Assert.AreEqual((int)QueueItemStatus.Failed, item.StatusId);
             }
         }
     }

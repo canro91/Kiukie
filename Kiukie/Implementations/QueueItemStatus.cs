@@ -1,6 +1,6 @@
 ﻿namespace Kiukie
 {
-    public enum ItemStatus
+    public enum QueueItemStatus
     {
         Pending = 1,
         Processing,

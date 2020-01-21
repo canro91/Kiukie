@@ -6,7 +6,7 @@ namespace Kiukie.Sample
     {
         public StringItem() { }
 
-        public StringItem(ItemStatus status, string payload)
+        public StringItem(QueueItemStatus status, string payload)
         {
             StatusId = (int)status;
             Payload = payload;

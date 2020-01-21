@@ -32,7 +32,7 @@ OUTPUT INSERTED.*";
 
         public async Task UpdateAsync(IQueueItem<T> item, Exception e = null)
         {
-            var status = (e == null) ? ItemStatus.Succeeded : ItemStatus.Failed;
+            var status = (e == null) ? QueueItemStatus.Succeeded : QueueItemStatus.Failed;
             await Connection.ExecuteSqlAsync(@"
 UPDATE Kiukie.Queue
 SET StatusId = @StatusId
