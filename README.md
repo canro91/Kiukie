@@ -12,7 +12,7 @@ Kiukie offers default hosted services and queue implementations. You only need t
 
 ### Process and forget
 
-Kiukie has `QueueProcessor` and `DefaultQueue`. Once an item is dequeued, it will be removed from the queue table.
+Kiukie has `DefaultQueueProcessor` and `DefaultQueue`. Once an item is dequeued, it will be removed from the queue table.
 
 ### Process and update
 

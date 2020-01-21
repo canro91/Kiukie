@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Kiukie.Tests.Integration
 {
     [TestFixture]
-    public class QueueProcessorTests
+    public class DefaultQueueProcessorTests
     {
         [Test]
         public async Task ProcessAsync_SingleItemInQueue_ProcessesAndEmptiesQueue()
@@ -19,7 +19,7 @@ namespace Kiukie.Tests.Integration
 
                 var queue = new DefaultQueue<string>(connection);
                 var handler = new FakePayloadHandler();
-                var queueProcessor = new QueueProcessor<string>(queue, handler);
+                var queueProcessor = new DefaultQueueProcessor<string>(queue, handler);
 
                 var processed = await queueProcessor.ProcessAsync();
                 Assert.IsTrue(processed);

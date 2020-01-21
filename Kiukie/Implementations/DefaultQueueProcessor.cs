@@ -2,12 +2,12 @@
 
 namespace Kiukie
 {
-    public class QueueProcessor<T> : IQueueProcessor
+    public class DefaultQueueProcessor<T> : IQueueProcessor
     {
         private readonly IQueue<T> Queue;
         private readonly IPayloadHandler<T> PayloadHandler;
 
-        public QueueProcessor(IQueue<T> queue, IPayloadHandler<T> payloadHandler)
+        public DefaultQueueProcessor(IQueue<T> queue, IPayloadHandler<T> payloadHandler)
         {
             this.Queue = queue;
             this.PayloadHandler = payloadHandler;

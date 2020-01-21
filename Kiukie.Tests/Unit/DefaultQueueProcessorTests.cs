@@ -5,14 +5,14 @@ using System.Threading.Tasks;
 namespace Kiukie.Tests.Unit
 {
     [TestFixture]
-    public class QueueProcessorTests
+    public class DefaultQueueProcessorTests
     {
         [Test]
         public async Task ProcessAsync_EmptyQueue_ReturnsFalse()
         {
             var queue = new EmptyQueue();
             var handler = new FakePayloadHandler();
-            var queueProcessor = new QueueProcessor<string>(queue, handler);
+            var queueProcessor = new DefaultQueueProcessor<string>(queue, handler);
 
             var processed = await queueProcessor.ProcessAsync();
 
@@ -24,7 +24,7 @@ namespace Kiukie.Tests.Unit
         {
             var queue = new SingleItemQueue(new StringItem("An item"));
             var handler = new FakePayloadHandler();
-            var queueProcessor = new QueueProcessor<string>(queue, handler);
+            var queueProcessor = new DefaultQueueProcessor<string>(queue, handler);
 
             var processed = await queueProcessor.ProcessAsync();
 
@@ -36,7 +36,7 @@ namespace Kiukie.Tests.Unit
         {
             var queue = new SingleItemQueue(new StringItem("An item"));
             var handler = new ThrowExceptionPayloadHandler(new Exception("An exception"));
-            var queueProcessor = new QueueProcessor<string>(queue, handler);
+            var queueProcessor = new DefaultQueueProcessor<string>(queue, handler);
 
             Assert.ThrowsAsync<Exception>(() => queueProcessor.ProcessAsync());
         }
