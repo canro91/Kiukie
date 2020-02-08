@@ -16,7 +16,7 @@ Kiukie has `DefaultQueueProcessor` and `DefaultQueue`. Once an item is dequeued,
 
 ### Process and update
 
-Kiukie has `StatefulQueueProcessor` and `StatefulQueue`. This queue implementation uses an status (`Pending`, `Processing`, `Succeeded` and `Failed`) to dequeue, process and update items. Once an item is processed, it will remain in the queue table with either `Sucess` or `Failed` status. This implementation is suitable for operations likely to fail.
+Kiukie has `StatefulQueueProcessor` and `StatefulQueue`. This queue implementation uses an status (`Pending`, `Processing`, `Succeeded` and `Failed`) to dequeue, process and update items. Once an item is processed, it will remain in the queue table with either `Succeeded` or `Failed` status. This implementation is suitable for operations likely to fail.
 
 ### How-to
 
@@ -25,6 +25,8 @@ Kiukie has `StatefulQueueProcessor` and `StatefulQueue`. This queue implementati
 3. Write your own item handler.
 4. Plug in everything into the provided hosted service.
 5. Voila!
+
+You can take a look at the [Sample project](https://github.com/canro91/Kiukie/tree/master/Kiukie.Sample) to see the two implementations in action.
 
 ## Installation
 
