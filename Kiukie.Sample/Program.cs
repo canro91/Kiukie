@@ -30,7 +30,7 @@ namespace Kiukie.Sample
                     //services.Configure<QueueProcessorConfig>(config.GetSection("QueueProcessor"));
                     //services.AddScoped<IPayloadHandler<string>, StringItemPayloadHandler>();
                     //services.AddScoped<IQueue<string>, DefaultQueue<string>>();
-                    //services.AddScoped<IQueueProcessor, QueueProcessor<string>>();
+                    //services.AddScoped<IQueueProcessor, DefaultQueueProcessor<string>>();
 
                     // 2. Use an statefull queue and queue processor
                     services.Configure<QueueProcessorConfig>(config.GetSection("QueueProcessor"));
